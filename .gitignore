@@ -10,3 +10,11 @@ hs_err_pid*
 */bin
 *.settings
 *.classpath
+/bin/
+build/build/
+build/deploy/
+build/dist/
+build/externalLibs/
+build/project/
+build/projectRefs/
+*build.fxbuild
