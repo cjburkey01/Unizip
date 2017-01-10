@@ -45,7 +45,7 @@ public class ArchiveEdit {
 					removeProg = new ProgressBar();
 					removeInfo = new Label("Please wait...");
 					
-					scene.getStylesheets().add("css/app.css");
+					Util.addCss(scene);
 					
 					removeProg.setMaxWidth(Double.MAX_VALUE);
 					removeInfo.setPadding(new Insets(10));
@@ -151,7 +151,7 @@ public class ArchiveEdit {
 					addProg = new ProgressBar();
 					addInfo = new Label("Please wait...");
 					
-					scene.getStylesheets().add("css/app.css");
+					Util.addCss(scene);
 					
 					addProg.setMaxWidth(Double.MAX_VALUE);
 					addInfo.setPadding(new Insets(10));

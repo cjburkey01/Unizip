@@ -4,12 +4,14 @@ import java.io.File;
 import java.util.List;
 import com.cjburkey.unizip.archive.ArchiveFile;
 import com.cjburkey.unizip.archive.ArchiveUtils;
+import com.cjburkey.unizip.pref.PreferenceManager;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
@@ -21,10 +23,12 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -57,6 +61,11 @@ public class App {
 	private MenuItem extractAll;
 	private MenuItem extractSelected;
 	private MenuItem windowExit;
+	private MenuItem windowPrefs;
+	
+	private Stage prefs;
+	private VBox prefsRoot;
+	private Scene prefsScene;
 	
 	private String currentDir;
 	
@@ -93,7 +102,7 @@ public class App {
 		
 		setupMenus();
 		
-		this.scene.getStylesheets().add("css/app.css");
+		Util.addCss(this.scene);
 		
 		this.bottomText.setMaxWidth(Double.MAX_VALUE);
 		this.bottom.getItems().addAll(this.bottomText);
@@ -142,6 +151,48 @@ public class App {
 		this.root.setTop(this.menus);
 		this.root.setCenter(this.listView);
 		this.root.setBottom(this.bottom);
+		this.setupPrefs();
+	}
+	
+	private void setupPrefs() {
+		this.prefs = new Stage();
+		this.prefsRoot = new VBox();
+		this.prefsScene = new Scene(this.prefsRoot);
+		HBox buttons = new HBox();
+		Button save = new Button("Save");
+		Button cancel = new Button("Cancel");
+
+		CheckBox customTheme = new CheckBox("Use custom theme");
+		
+		Util.addCss(this.prefsScene);
+		
+		this.prefsRoot.setPadding(new Insets(10));
+		this.prefsRoot.setSpacing(10);
+		this.prefsRoot.setAlignment(Pos.CENTER_LEFT);
+		this.prefsRoot.getChildren().addAll(customTheme, buttons);
+		
+		buttons.setSpacing(10);
+		buttons.setAlignment(Pos.CENTER_RIGHT);
+		buttons.setMaxWidth(Double.MAX_VALUE);
+		buttons.getChildren().addAll(save, cancel);
+		
+		this.prefs.initModality(Modality.APPLICATION_MODAL);
+		this.prefs.setScene(this.prefsScene);
+		this.prefs.setResizable(false);
+		this.prefs.setTitle("Preferences");
+		this.prefs.setWidth(Screen.getPrimary().getVisualBounds().getWidth() / 3);
+		this.prefs.centerOnScreen();
+		this.prefs.setOnCloseRequest(e -> { e.consume(); this.prefs.hide(); });
+		this.prefs.setOnShown(e -> {
+			customTheme.setSelected(PreferenceManager.getBool("customTheme"));
+		});
+
+		cancel.setOnAction(e -> this.prefs.hide());
+		save.setOnAction(e -> {
+			PreferenceManager.setPref("customTheme", customTheme.isSelected() + "");
+			this.prefs.hide();
+			this.init(this.stage);
+		});
 	}
 	
 	private void setupMenus() {
@@ -161,7 +212,8 @@ public class App {
 		this.editRemoveFile = new MenuItem("Delete File from Archive");
 		this.extractAll = new MenuItem("Extract All");
 		this.extractSelected = new MenuItem("Extract Selected");
-		this.windowExit = new MenuItem("Quit Program");
+		this.windowExit = new MenuItem("Exit");
+		this.windowPrefs = new MenuItem("Preferences");
 		
 		this.fileOpen.setOnAction(e -> openFile());
 		this.fileClose.setOnAction(e -> refreshList(null));
@@ -180,13 +232,14 @@ public class App {
 			}
 		});
 		this.windowExit.setOnAction(e -> this.stage.close());
+		this.windowPrefs.setOnAction(e -> this.prefs.show());
 		this.upDir.setOnAction(e -> upDir());
 		
 		this.toolBar.getItems().addAll(this.upDir);
 		this.file.getItems().addAll(this.fileNew, this.fileOpen, this.fileClose);
 		this.edit.getItems().addAll(this.editAddFile, this.editRemoveFile);
 		this.extract.getItems().addAll(this.extractAll, this.extractSelected);
-		this.window.getItems().addAll(this.windowExit);
+		this.window.getItems().addAll(this.windowPrefs, this.windowExit);
 		this.menuBar.getMenus().addAll(this.file, this.edit, this.extract, this.window);
 		this.menus.getChildren().addAll(this.menuBar, this.toolBar);
 		

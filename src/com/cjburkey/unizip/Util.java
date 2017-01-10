@@ -1,6 +1,8 @@
 package com.cjburkey.unizip;
 
+import com.cjburkey.unizip.pref.PreferenceManager;
 import javafx.application.Platform;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Modality;
@@ -16,6 +18,12 @@ public class Util {
 			t.printStackTrace();
 			alertError("Error!", msg);
 		});
+	}
+	
+	public static final void addCss(Scene scene) {
+		scene.getStylesheets().clear();
+		scene.getStylesheets().add("css/common.css");
+		scene.getStylesheets().add("css/" + ((PreferenceManager.getBool("customTheme")) ? "custom" : "app") + ".css");
 	}
 	
 	public static final void alertError(String title, String text) {
