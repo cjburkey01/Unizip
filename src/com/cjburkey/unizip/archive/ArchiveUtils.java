@@ -49,14 +49,16 @@ public class ArchiveUtils {
 	}
 	
 	public static final void removeFromZip(List<ArchiveFile> aff) {
-		List<ArchiveFile> newList = new ArrayList<ArchiveFile>();
-		newList.addAll(aff);
-		for(ArchiveFile ae : aff) {
-			List<ArchiveFile> del = getChildren(ae);
-			newList.addAll(del);
-			Util.print(del.size());
+		if(Unizip.getApp().currentDir() != null) {
+			List<ArchiveFile> newList = new ArrayList<ArchiveFile>();
+			newList.addAll(aff);
+			for(ArchiveFile ae : aff) {
+				List<ArchiveFile> del = getChildren(ae);
+				newList.addAll(del);
+				Util.print(del.size());
+			}
+			ArchiveEdit.removeFromZip(openFile, newList);
 		}
-		ArchiveEdit.removeFromZip(openFile, newList);
 	}
 	
 	public static final List<ArchiveFile> getChildren(ArchiveFile af) {
@@ -72,7 +74,9 @@ public class ArchiveUtils {
 	}
 	
 	public static final void addToZip(List<File> toAdd) {
-		ArchiveEdit.addFile(openFile, toAdd);
+		if(Unizip.getApp().currentDir() != null) {
+			ArchiveEdit.addFile(openFile, toAdd);
+		}
 	}
 	
 	public static final ArchiveFile getFromName(String name) {
@@ -90,6 +94,21 @@ public class ArchiveUtils {
 	
 	public static final File getOpenFile() {
 		return openFile;
+	}
+	
+	public static final boolean existsInArchive(String path) {
+		for(ArchiveFile ae : zipFile) {
+			if(ae.getZipEntry().getName().equals(path)) return true;
+		}
+		return false;
+	}
+	
+	public static final boolean isArchive(File f) {
+		String n = f.getName();
+		if(n.endsWith(".zip") || n.endsWith(".rar") || n.endsWith(".jar")) {
+			return true;
+		}
+		return false;
 	}
 	
 }

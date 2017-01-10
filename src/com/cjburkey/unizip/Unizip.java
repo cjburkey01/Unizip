@@ -5,7 +5,7 @@ import javafx.stage.Stage;
 
 public class Unizip extends Application {
 	
-	public static final String version = "0.0.1";
+	public static final String version = "0.0.2";
 	private static App inst;
 	
 	public static void main(String[] args) {

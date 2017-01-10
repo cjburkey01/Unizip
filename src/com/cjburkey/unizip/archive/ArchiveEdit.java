@@ -45,6 +45,8 @@ public class ArchiveEdit {
 					removeProg = new ProgressBar();
 					removeInfo = new Label("Please wait...");
 					
+					scene.getStylesheets().add("css/app.css");
+					
 					removeProg.setMaxWidth(Double.MAX_VALUE);
 					removeInfo.setPadding(new Insets(10));
 					removeInfo.setTextAlignment(TextAlignment.CENTER);
@@ -131,6 +133,15 @@ public class ArchiveEdit {
 	private static ProgressBar addProg = null;
 	private static Label addInfo = null;
 	public static final void addFile(File f, List<File> add) {
+		for(File file : add) {
+			String name = Unizip.getApp().currentDir();
+			if(!name.equals("")) name += "/";
+			name += file.getName();
+			if(ArchiveUtils.existsInArchive(name)) {
+				Util.alertError("Error", "That file is already in the archive.");
+				return;
+			}
+		}
 		Thread thread = new Thread(() -> {
 			try {
 				Platform.runLater(() -> {
@@ -139,6 +150,8 @@ public class ArchiveEdit {
 					Scene scene = new Scene(root);
 					addProg = new ProgressBar();
 					addInfo = new Label("Please wait...");
+					
+					scene.getStylesheets().add("css/app.css");
 					
 					addProg.setMaxWidth(Double.MAX_VALUE);
 					addInfo.setPadding(new Insets(10));
@@ -190,10 +203,10 @@ public class ArchiveEdit {
 					zos.closeEntry();
 				}
 				for(File file : add) {
+					String name = Unizip.getApp().currentDir();
+					if(!name.equals("")) name += "/";
+					name += file.getName();
 					if(file.exists()) {
-						String name = Unizip.getApp().currentDir();
-						if(!name.equals("")) name += "/";
-						name += file.getName();
 						ZipEntry addF = new ZipEntry(name);
 						addF.setSize(file.length());
 						addF.setTime(file.lastModified());

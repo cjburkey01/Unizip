@@ -84,7 +84,7 @@ public class App {
 		this.root = new BorderPane();
 		this.scene = new Scene(this.root);
 		this.placeholder = new VBox();
-		this.placeHolderText = new Label("No archive is open.  Use the file menu to open an archive, or click the button below.");
+		this.placeHolderText = new Label("No archive is open.  Use the file menu to open an archive, or click the button below.  You may also drag an archive into this box.");
 		this.placeHolderEmpty = new Label("This archive or directory is empty.");
 		this.placeHolderButton = new Button("Open Archive");
 		this.listView = new ListView<ArchiveFile>();
@@ -92,6 +92,8 @@ public class App {
 		this.bottom = new ToolBar();
 		
 		setupMenus();
+		
+		this.scene.getStylesheets().add("css/app.css");
 		
 		this.bottomText.setMaxWidth(Double.MAX_VALUE);
 		this.bottom.getItems().addAll(this.bottomText);
@@ -117,16 +119,26 @@ public class App {
 		this.placeholder.setSpacing(10);
 		this.listView.setPlaceholder(this.placeholder);
 		this.listView.setOnDragOver(e -> {
-			if(!e.getSource().equals(this.listView) && e.getDragboard().hasFiles()) {
-				e.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+			if(e.getDragboard().hasFiles()) {
+				e.acceptTransferModes(TransferMode.COPY);
+				this.listView.setStyle("-fx-border-color: rgb(100, 100, 255);");
 			}
 		});
+		this.listView.setOnDragExited(e -> this.listView.setStyle("-fx-border-color: rgb(200, 200, 200);"));
 		this.listView.setOnDragDropped(e -> {
+			this.listView.setStyle("-fx-border-color: rgb(200, 200, 200);");
 			Dragboard db = e.getDragboard();
-			ArchiveUtils.addToZip(db.getFiles());
 			e.setDropCompleted(db.hasFiles());
+			if(db.hasFiles()) {
+				if(db.getFiles().size() == 1 && ArchiveUtils.isArchive(db.getFiles().get(0)) && this.currentDir == null) {
+					ArchiveUtils.open(db.getFiles().get(0));
+				} else {
+					ArchiveUtils.addToZip(db.getFiles());
+				}
+			}
 			e.consume();
 		});
+		this.listView.setStyle("-fx-border-color: rgb(200, 200, 200);");
 		this.root.setTop(this.menus);
 		this.root.setCenter(this.listView);
 		this.root.setBottom(this.bottom);
@@ -154,13 +166,11 @@ public class App {
 		this.fileOpen.setOnAction(e -> openFile());
 		this.fileClose.setOnAction(e -> refreshList(null));
 		this.editAddFile.setOnAction(e -> {
-			if(currentDir != null) {
-				FileChooser ch = new FileChooser();
-				ch.setTitle("Add File to Archive");
-				List<File> f = ch.showOpenMultipleDialog(this.stage);
-				if(f != null && !f.isEmpty()) {
-					ArchiveUtils.addToZip(f);
-				}
+			FileChooser ch = new FileChooser();
+			ch.setTitle("Add File to Archive");
+			List<File> f = ch.showOpenMultipleDialog(this.stage);
+			if(f != null && !f.isEmpty()) {
+				ArchiveUtils.addToZip(f);
 			}
 		});
 		this.editRemoveFile.setOnAction(e -> {
