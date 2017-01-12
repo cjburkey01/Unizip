@@ -42,6 +42,12 @@ public class PreferenceManager {
 		return Boolean.valueOf(o + "");
 	}
 	
+	public static final String getString(Object key) {
+		Object o = getPref(key);
+		if(o == null) return null;
+		return (String) o;
+	}
+	
 	public static final Set<Entry<Object, Object>> getPrefs() {
 		try {
 			load();

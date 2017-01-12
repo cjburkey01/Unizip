@@ -1,0 +1,25 @@
+English(US)
+noArchiveOpen=No archive is open.  Use the file menu to open an archive, or click the button below.  You may also drag an archive into this box.
+dirArchiveEmpty=This archive or directory is empty.
+save=Save
+cancel=Cancel
+file=File
+edit=Edit
+extract=Extract
+exAll=Extract Whole Archive
+exSel=Extract Selected Files
+window=Window
+buttonTheme=Use custom button theme
+newArchive=New Archive
+closeArchive=Close Archive
+openArchive=Open Archive
+into=Put File(s) Into Archive
+delete=Remove File(s) From Archive
+exit=Exit
+prefs=Preferences
+archiveFiles=Archive Files
+wait=Please Wait
+exists=That file is already in the archive.
+working=Working...
+copying=Copying TMP file, this may take a few seconds...
+couldNotOpen=There was an error while trying to open your archive.  This could be because the file is corrupt, or that it is an unsupported file type.

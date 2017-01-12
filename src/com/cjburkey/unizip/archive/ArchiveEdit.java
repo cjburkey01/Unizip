@@ -18,6 +18,7 @@ import java.util.zip.ZipOutputStream;
 import com.cjburkey.unizip.IO;
 import com.cjburkey.unizip.Unizip;
 import com.cjburkey.unizip.Util;
+import com.cjburkey.unizip.lang.LanguageLoader;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -121,9 +122,9 @@ public class ArchiveEdit {
 			Util.print("Done.");
 			Platform.runLater(() -> {
 				removeStage.hide();
-				String currentDir = Unizip.getApp().currentDir();
+				String currentDir = Unizip.getApp().getMainWindow().getCurrentDir();
 				ArchiveUtils.open(f);
-				Unizip.getApp().refreshList(currentDir);
+				Unizip.getApp().getMainWindow().refreshList(currentDir);
 			});
 		});
 		thread.start();
@@ -134,11 +135,11 @@ public class ArchiveEdit {
 	private static Label addInfo = null;
 	public static final void addFile(File f, List<File> add) {
 		for(File file : add) {
-			String name = Unizip.getApp().currentDir();
+			String name = Unizip.getApp().getMainWindow().getCurrentDir();
 			if(!name.equals("")) name += "/";
 			name += file.getName();
 			if(ArchiveUtils.existsInArchive(name)) {
-				Util.alertError("Error", "That file is already in the archive.");
+				Util.alertError("Error", LanguageLoader.get("exists"));
 				return;
 			}
 		}
@@ -149,7 +150,7 @@ public class ArchiveEdit {
 					BorderPane root = new BorderPane();
 					Scene scene = new Scene(root);
 					addProg = new ProgressBar();
-					addInfo = new Label("Please wait...");
+					addInfo = new Label(LanguageLoader.get("wait"));
 					
 					Util.addCss(scene);
 					
@@ -166,7 +167,7 @@ public class ArchiveEdit {
 					addStage.setScene(scene);
 					addStage.setWidth(Screen.getPrimary().getVisualBounds().getWidth() / 2);
 					addStage.setResizable(false);
-					addStage.setTitle("Working...");
+					addStage.setTitle(LanguageLoader.get("working"));
 					addStage.show();
 					addStage.setOnCloseRequest(e -> e.consume());
 					addProg.setProgress(0);
@@ -203,7 +204,7 @@ public class ArchiveEdit {
 					zos.closeEntry();
 				}
 				for(File file : add) {
-					String name = Unizip.getApp().currentDir();
+					String name = Unizip.getApp().getMainWindow().getCurrentDir();
 					if(!name.equals("")) name += "/";
 					name += file.getName();
 					if(file.exists()) {
@@ -227,7 +228,7 @@ public class ArchiveEdit {
 				zos.close();
 				zf.close();
 				Platform.runLater(() -> {
-					addInfo.setText("Copying TMP file, this may take a few seconds...");
+					addInfo.setText(LanguageLoader.get("copying"));
 					addProg.setProgress(-1);
 				});
 				Util.print("TMP Done");
@@ -238,9 +239,9 @@ public class ArchiveEdit {
 			Util.print("Done.");
 			Platform.runLater(() -> {
 				addStage.hide();
-				String currentDir = Unizip.getApp().currentDir();
+				String currentDir = Unizip.getApp().getMainWindow().getCurrentDir();
 				ArchiveUtils.open(f);
-				Unizip.getApp().refreshList(currentDir);
+				Unizip.getApp().getMainWindow().refreshList(currentDir);
 			});
 		});
 		thread.start();

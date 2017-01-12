@@ -1,0 +1,25 @@
+Español(ESP)
+noArchiveOpen=Ningún archivo está abierto. Utilice el menú Archivo para abrir un archivo o haga clic en el botón de abajo.  También puede arrastrar un archivo a esta casilla.
+dirArchiveEmpty=Este archivo o directorio está vacío.
+save=Guardar
+cancel=Cancelar
+file=Archivo
+edit=Editar
+extract=Extraer
+exAll=Extraer todo el archivo
+exSel=Extraer archivos seleccionados
+window=Ventanilla
+buttonTheme=Utilizar tema de botón personalizado
+newArchive=Nuevo Archivo
+closeArchive=Cerrar Archivo
+openArchive=Archivo Abierto
+into=Poner archivo(s) en archivo
+delete=Eliminar archivo(s) del archivo
+exit=Salir
+prefs=Preferencias
+archiveFiles=Archivar Archivos
+wait=Por Favor Espera
+exists=Ese archivo ya está en el archivo.
+working=Trabajando...
+copying=Copiando un archivo temporal, esto puede tardar unos segundos...
+couldNotOpen=Se ha producido un error al intentar abrir el archivo.  Esto puede deberse a que el archivo está dañado o que es un tipo de archivo no admitido.

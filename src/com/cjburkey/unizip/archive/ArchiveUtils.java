@@ -9,6 +9,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import com.cjburkey.unizip.Unizip;
 import com.cjburkey.unizip.Util;
+import com.cjburkey.unizip.lang.LanguageLoader;
 
 public class ArchiveUtils {
 	
@@ -26,17 +27,17 @@ public class ArchiveUtils {
 			}
 			zfile.close();
 			Collections.sort(zipFile);
-			Unizip.getApp().refreshList("");
-			Unizip.getApp().setPlaceholder(1);
+			Unizip.getApp().getMainWindow().refreshList("");
+			Unizip.getApp().getMainWindow().setPlaceholder(1);
 		} catch(Exception e) {
-			Util.error(e, "There was an error while trying to open your archive.  This could be because the file is corrupt, or that it is an unsupported file type.");
+			Util.error(e, LanguageLoader.get("couldNotOpen"));
 		}
 	}
 	
 	public static final void close() {
 		zipFile.clear();
 		openFile = null;
-		Unizip.getApp().setPlaceholder(0);
+		Unizip.getApp().getMainWindow().setPlaceholder(0);
 	}
 	
 	public static final List<ArchiveFile> getFromDir(String dir) {
@@ -49,7 +50,7 @@ public class ArchiveUtils {
 	}
 	
 	public static final void removeFromZip(List<ArchiveFile> aff) {
-		if(Unizip.getApp().currentDir() != null) {
+		if(Unizip.getApp().getMainWindow().getCurrentDir() != null) {
 			List<ArchiveFile> newList = new ArrayList<ArchiveFile>();
 			newList.addAll(aff);
 			for(ArchiveFile ae : aff) {
@@ -74,7 +75,7 @@ public class ArchiveUtils {
 	}
 	
 	public static final void addToZip(List<File> toAdd) {
-		if(Unizip.getApp().currentDir() != null) {
+		if(Unizip.getApp().getMainWindow().getCurrentDir() != null) {
 			ArchiveEdit.addFile(openFile, toAdd);
 		}
 	}
