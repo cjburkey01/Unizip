@@ -84,7 +84,6 @@ public class LanguageLoader {
 		if(currentLanguage != null) {
 			for(Entry<String, String> e : currentLanguage.getKeys().entrySet()) {
 				if(e.getKey().equals(key)) {
-					Util.print("Got: '" + key + "'");
 					return e.getValue();
 				}
 			}

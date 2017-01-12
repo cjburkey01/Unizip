@@ -105,6 +105,7 @@ public class WindowPrefs implements IWindow {
 				ArchiveUtils.open(ArchiveUtils.getOpenFile());
 				Unizip.getApp().getMainWindow().refreshList(current);
 			}
+			this.init();
 		});
 	}
 	
